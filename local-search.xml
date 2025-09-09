@@ -4,6 +4,29 @@
   
   
   <entry>
+    <title>Buffon&#39;s Needle 投针实验</title>
+    <link href="/2025/09/03/drop_needles/"/>
+    <url>/2025/09/03/drop_needles/</url>
+    
+    <content type="html"><![CDATA[<blockquote><p>计算物理的一次大作业，也是<code>monte carlo</code>算法的一次最早引入，在这里做一个例子测试一下 <code>Hexo</code> 博客功能。<br>项目是基于 <code>manim</code> 库写的一个演示投针算法的动画，<code>manim</code> 库是 3blue1brown 开发的数学物理视频库，本代码旨在一次学习。</p></blockquote><h2 id="演示视频"><a href="#演示视频" class="headerlink" title="演示视频"></a>演示视频</h2><video  src="/videos/BuffonNeedleFast.mp4"  style="max-width:100%;border-radius:12px"  controls  playsinline  muted  poster="/images/cover.jpg">  您的浏览器不支持 HTML5 视频播放，您可以<a href="/videos/BuffonNeedleFast.mp4">点此下载</a>。</video><blockquote><p>利用<code>manim</code>库演示的结果</p></blockquote><hr><h2 id="数学原理（简述）"><a href="#数学原理（简述）" class="headerlink" title="数学原理（简述）"></a>数学原理（简述）</h2><p>该实验方案的原理是基于数学统计理论所得的结论，即在实验中细针与平行线（此时是假设针与线宽相同）相交的概率为：  </p><p>$$<br>P &#x3D; \frac{2}{\pi}<br>$$</p><p>设针与平行线的垂直方向的夹角为 $\alpha$，那么针在垂直方向上的投影长度为：  </p><p>$$<br>l \cdot |\cos \alpha|<br>$$</p><p>若平行线间距为 $s$，则针与平行线相交的概率为：  </p><p>$$<br>\frac{l \cdot |\cos \alpha|}{s}<br>$$</p><p>由于 $\alpha$ 在区间 $[0, \pi]$ 内均匀分布，所以 $|\cos \alpha|$ 的平均值为：  </p><p>$$<br>\frac{1}{\pi} \int_0^\pi |\cos \alpha| \  d\alpha &#x3D; \frac{2}{\pi}<br>$$</p><hr><p>假如在 $N$ 次投针实验中，有 $M$ 次与平行线相交。  </p><p>当 $N$ 充分大时，相交的频率 $\tfrac{M}{N}$ 就近似为针与平行线相交的概率。  </p><p>因此结合公式，可得：  </p><p>$$<br>\pi \approx \frac{2N}{M}<br>$$</p><hr><h2 id="运行方式（项目记录）"><a href="#运行方式（项目记录）" class="headerlink" title="运行方式（项目记录）"></a>运行方式（项目记录）</h2><details>  <summary>折叠代码块</summary>  <pre><code class="language-python">from manim import *import numpy as np# 配置动画的全局参数config.pixel_height = 800config.pixel_width = 1200config.frame_height = 8.0config.frame_width = 14.0class BuffonNeedleFast(Scene):    def construct(self):        # 创建平行线        line_spacing = 2.0        num_lines = 7        lines = VGroup()        for i in range(num_lines):            y_position = (i - num_lines // 2) * line_spacing            line = Line(start=[-7, y_position, 0], end=[7, y_position, 0], color=BLUE)            lines.add(line)        self.play(Create(lines))                # 投掷针的模拟        needle_length = 1.5        num_needles = 500  # 增加投针次数        intersection_count = 0                for _ in range(num_needles):            # 随机生成针的中心位置和角度            x_center = np.random.uniform(-6, 6)            y_center = np.random.uniform(-3, 3)            angle = np.random.uniform(0, np.pi)                        # 计算针的两个端点            x_offset = (needle_length / 2) * np.cos(angle)            y_offset = (needle_length / 2) * np.sin(angle)                        start_point = np.array([x_center - x_offset, y_center - y_offset, 0])            end_point = np.array([x_center + x_offset, y_center + y_offset, 0])                        needle = Line(start=start_point, end=end_point, color=YELLOW)                        # 检查针是否与平行线相交            intersects = False            for line in lines:                if line_spacing / 2 >= np.abs(line.get_y() - y_center) <= needle_length / 2 * np.sin(angle):                    intersects = True                    break                        if intersects:                needle.set_color(RED)                intersection_count += 1            else:                needle.set_color(GREEN)                        # 显示针，调整 run_time 加快速度            self.play(Create(needle), run_time=0.05)  # 投针速度设置为 0.1s                    # 输出统计信息        pi_estimation = (2 * needle_length * num_needles) / (intersection_count * line_spacing)        result_text = Text(f"Estimated Pi: &#123;pi_estimation:.5f&#125;", font_size=36)        self.play(Write(result_text))        self.wait(2)  </code></pre></details><p>安装manim库同时输出视频</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">manim -p -ql drop_needles.py BuffonNeedleFast   <span class="hljs-comment"># 进入相应文件夹运行</span><br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    
+    <tags>
+      
+      <tag>Monte Carlo</tag>
+      
+      <tag>计算物理</tag>
+      
+      <tag>Manim</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Hello World</title>
     <link href="/2025/08/31/hello-world/"/>
     <url>/2025/08/31/hello-world/</url>
